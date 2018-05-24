@@ -1,4 +1,5 @@
     var canvas, engine, scene, camera;
+    var airplane;
     document.addEventListener('DOMContentLoaded', function() {
         //get canvas
         canvas = document.getElementById('renderCanvas');
@@ -18,8 +19,33 @@
         //camera.setTarget(new BABYLON.Vector3(0,0,0));
         camera.setPosition(new BABYLON.Vector3(0,50,100));
 
+        var cameraPosX = 0;
+        var cameraPosY = 50;
+        var cameraPosZ = 100;
+        var cameraPosAdd = 1;
+
+        window.addEventListener('keydown',function(event){
+         if(event.keyCode == 39 ){
+           camera.setPosition(new BABYLON.Vector3(cameraPosX-cameraPosAdd,cameraPosY,cameraPosZ));
+           cameraPosX = cameraPosX-cameraPosAdd;
+         }
+         if(event.keyCode == 37 ){
+            camera.setPosition(new BABYLON.Vector3(cameraPosX+cameraPosAdd,cameraPosY,cameraPosZ));
+            cameraPosX = cameraPosX+cameraPosAdd;
+         }
+         if(event.keyCode == 38 ){
+            camera.setPosition(new BABYLON.Vector3(cameraPosX,cameraPosY,cameraPosZ+cameraPosAdd));
+            cameraPosZ = cameraPosZ-cameraPosAdd;
+         }
+         if(event.keyCode == 40 ){
+            camera.setPosition(new BABYLON.Vector3(cameraPosX,cameraPosY,cameraPosZ-cameraPosAdd));
+            cameraPosZ = cameraPosZ+cameraPosAdd;            
+         }
+        })
+
         // attach the camera to the canvas
-        camera.attachControl(canvas,true);
+       camera.attachControl(canvas,true);
+
 
         // create a basic light, aiming 0,8,0
         var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0,8,0), scene);
@@ -36,8 +62,9 @@
             );
         box.position = new BABYLON.Vector3(0,0,0);
         
-      var airplane = BABYLON.SceneLoader.ImportMesh("","","airplane1.babylon", scene, function(newMeshes){
-        setup(newMeshes[0])
+      BABYLON.SceneLoader.ImportMesh("","","airplane1.babylon", scene, function(newMeshes){
+        airplane = newMeshes[0];
+        setup(airplane);
       });
 
       function setup(mesh){
@@ -47,13 +74,7 @@
         meshAdd = 1;
 
         mesh.scaling = new BABYLON.Vector3(1,1/16,1/8);
-        // mesh.position.x = meshX;
-        // mesh.position.y = meshY;
-        // mesh.position.z = meshZ; 
-        mesh.position = new BABYLON.Vector3(0, 35, 50);
-        //mesh.rotate(BABYLON.Axis.X, Math.PI/4, BABYLON.Space.WORLD);
-        //mesh.rotate(BABYLON.Axis.Y, Math.PI, BABYLON.Space.WORLD);
-        //mesh.rotate(BABYLON.Axis.Z, 0.025, BABYLON.Space.WORLD);
+        mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
 
         window.addEventListener('keydown',function(event){
          if(event.keyCode == 39 ){
@@ -67,15 +88,11 @@
             // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(1,0,0), box.getAbsolutePosition());
          }
          if(event.keyCode == 38 ){
-            // box.position = new BABYLON.Vector3(boxX,boxY+boxAdd,boxZ);
-            // boxY = boxY+boxAdd;            
             mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ+meshAdd);
             meshZ = meshZ-meshAdd;            
             // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,1), box.getAbsolutePosition());
          }
          if(event.keyCode == 40 ){
-            // box.position = new BABYLON.Vector3(boxX,boxY-boxAdd,boxZ);
-            // boxY = boxY-boxAdd;            
             mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ-meshAdd);
             meshZ = meshZ+meshAdd;            
             // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,-1), box.getAbsolutePosition());
@@ -87,7 +104,12 @@
 
 
         // simple wireframe material
-        var material = new BABYLON.StandardMaterial('ground-material', scene);
+        var material = new BABYLON.StandardMaterial('material', scene);
+        material.diffuseTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
+        material.specularTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
+        material.emissiveTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
+        material.ambientTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
+
         //material.wireframe = true;
         box.material = material;
 
