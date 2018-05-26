@@ -10,13 +10,40 @@
         //create scene
         scene = new BABYLON.Scene(engine);
 
-        // create a FreeCamera, and set its position to (x:0, y:4, z:-10)
-        //camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 4,-10), scene);
+        scene.clearColor = new BABYLON.Color3(0.2, 0.5, 0.9);
+        scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
+
+        scene.fogMode = BABYLON.Scene.FOGMODE_EXP2;
+        scene.fogDensity = 0.002;
+        scene.fogColor = new BABYLON.Color3(0.9,0.9,0.9);
+
+
+// Skybox
+var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000.0, scene);
+var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
+skyboxMaterial.backFaceCulling = false;
+skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("TropicalSunnyDay/TropicalSunnyDay", scene);
+skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
+skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
+skybox.material = skyboxMaterial;
+
+
+
+        //create a FreeCamera, and set its position to (x:0, y:4, z:-10)
+        // camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 50,100), scene);
+
+
+        // camera.keysUp.push(38);
+        // camera.keysDown.push(40);
+        // camera.keysRight.push(39);
+        // camera.keysLeft.push(37);
+
 
         camera = new BABYLON.ArcRotateCamera("Camera",0,0,10, new BABYLON.Vector3(0,0,0),scene);
 
-        // target the camera to scene origin
-        //camera.setTarget(new BABYLON.Vector3(0,0,0));
+        //target the camera to scene origin
+        camera.setTarget(new BABYLON.Vector3(0,0,0));
         camera.setPosition(new BABYLON.Vector3(0,50,100));
 
         var cameraPosX = 0;
@@ -47,6 +74,11 @@
        camera.attachControl(canvas,true);
 
 
+
+
+
+
+
         // create a basic light, aiming 0,8,0
         var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0,8,0), scene);
 
@@ -66,6 +98,20 @@
         airplane = newMeshes[0];
         setup(airplane);
       });
+
+
+        // simple wireframe material
+        var material = new BABYLON.StandardMaterial('material', scene);
+        //material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
+        material.wireframe = true;
+        box.material = material;
+
+
+       engine.runRenderLoop(function() {
+            scene.render();
+        });
+    });
+    
 
       function setup(mesh){
         meshX = 0;
@@ -99,27 +145,3 @@
          }
         })
       }
-
-//      window.onkeydown = function(event)
-
-
-        // simple wireframe material
-        var material = new BABYLON.StandardMaterial('material', scene);
-        material.diffuseTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
-        material.specularTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
-        material.emissiveTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
-        material.ambientTexture = new BABYLON.Texture("island_heightmap.jpg", scene);
-
-        //material.wireframe = true;
-        box.material = material;
-
-
-       engine.runRenderLoop(function() {
-            //box.position.x = box.position.x + 0.05;
-           
-                
-            
-            scene.render();
-        });
-    });
-
