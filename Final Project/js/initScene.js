@@ -31,10 +31,10 @@ document.addEventListener('DOMContentLoaded', function () {
         var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
 
         //The goal distance of camera from target
-        camera.radius = 30;
+        camera.radius = 20;
 
         // The goal height of camera above local origin (centre) of target
-        camera.heightOffset = 20;
+        camera.heightOffset = 10;
 
         // The goal rotation of camera around local origin (centre) of target in x y plane
         camera.rotationOffset = 0;
@@ -63,6 +63,84 @@ document.addEventListener('DOMContentLoaded', function () {
             scene
         );
         land.position = new BABYLON.Vector3(0, 0, 0);
+
+
+        var torus = [];
+
+        //the doughnut
+        torus[0] = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2}, scene);
+        torus[0].position = new BABYLON.Vector3(-20,35,0);
+        torus[0].rotation.x = Math.PI/2;
+
+        torus[1] = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2}, scene);
+        torus[1].position = new BABYLON.Vector3(-20,35,-10);
+        torus[1].rotation.x = Math.PI/2;
+
+        //ring material
+        var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
+        myMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
+        torus[0].material = myMaterial;
+        torus[1].material = myMaterial;
+
+        var score = 0;
+
+        //score board
+        var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+        var text1 = new BABYLON.GUI.TextBlock();
+        text1.text = "Score = " + score;
+        text1.color = "red";
+        text1.fontSize = 24;
+        text1.left = '35%';
+        text1.top = '-45%'
+
+        advancedTexture.addControl(text1);    
+
+        BABYLON.SceneLoader.ImportMesh("", "", "airplane1.babylon", scene, function (newMeshes) {
+            airplane = newMeshes[0];
+            setup(airplane);
+            camera.lockedTarget = airplane; //version 2.5 onwards
+            airplane.animations = []; //for animation
+            scene.registerBeforeRender(function() {
+                airplane.position.z -=0.1 ;
+
+                for(var i = 0; i <= torus.length-1; i++){
+                    if(torus[i].intersectsMesh(airplane, false)){
+                        score++;
+                        torus[i].position = new BABYLON.Vector3(-20,0,0);
+                    }                    
+                }
+                    text1.text = "Score = "+ score;
+            })
+        });
+
+
+            window.addEventListener('keydown', function (event) {
+                if (event.keyCode == 39) {
+                    airplane.animations.push(yRot1);
+                    airplane.animations.push(zRot1);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 37) {
+                    airplane.animations.push(yRot2);
+                    airplane.animations.push(zRot2);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 38) {
+                    airplane.animations.push(xRot);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 40) {
+                    airplane.animations.push(xRot1);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                }
+            })
 
 //animation for going right
         var yRot1 = new BABYLON.Animation("yRot", "rotation.y", 
@@ -170,43 +248,6 @@ document.addEventListener('DOMContentLoaded', function () {
         });
         xRot1.setKeys(keyFramesX1);
 
-        BABYLON.SceneLoader.ImportMesh("", "", "airplane1.babylon", scene, function (newMeshes) {
-            airplane = newMeshes[0];
-            setup(airplane);
-            camera.lockedTarget = airplane; //version 2.5 onwards
-            scene.registerAfterRender(function() {
-                airplane.position.z -=0.1 ;
-            })
-
-            airplane.animations = [];
-
-            window.addEventListener('keydown', function (event) {
-                if (event.keyCode == 39) {
-                    airplane.animations.push(yRot1);
-                    airplane.animations.push(zRot1);
-                    scene.beginAnimation(airplane, 0, 10, false);
-                    airplane.animations.pop();
-                    airplane.animations.pop();
-                }
-                if (event.keyCode == 37) {
-                    airplane.animations.push(yRot2);
-                    airplane.animations.push(zRot2);
-                    scene.beginAnimation(airplane, 0, 10, false);
-                    airplane.animations.pop();
-                    airplane.animations.pop();
-                }
-                if (event.keyCode == 38) {
-                    airplane.animations.push(xRot);
-                    scene.beginAnimation(airplane, 0, 10, false);
-                    airplane.animations.pop();
-                }
-                if (event.keyCode == 40) {
-                    airplane.animations.push(xRot1);
-                    scene.beginAnimation(airplane, 0, 10, false);
-                    airplane.animations.pop();
-                }
-            })
-        });
 
         // simple wireframe material
         var material = new BABYLON.StandardMaterial('material', scene);
