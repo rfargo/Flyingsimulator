@@ -48,8 +48,6 @@ document.addEventListener('DOMContentLoaded', function () {
         // This attaches the camera to the canvas
         camera.attachControl(canvas, true);
 
-        // NOTE:: SET CAMERA TARGET AFTER THE TARGET'S CREATION AND NOTE CHANGE FROM BABYLONJS V 2.5
-        //targetMesh created here
 
         // create a basic light, aiming 0,8,0
         var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
@@ -66,20 +64,159 @@ document.addEventListener('DOMContentLoaded', function () {
         );
         land.position = new BABYLON.Vector3(0, 0, 0);
 
+//animation for going right
+        var yRot1 = new BABYLON.Animation("yRot", "rotation.y", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesR = []; 
+        keyFramesR.push({
+           frame: 0,
+           value: 0
+        });
+        keyFramesR.push({
+           frame: 1,
+           value: Math.PI/8
+        });
+        keyFramesR.push({
+           frame: 5,
+           value: 0
+        });
+        yRot1.setKeys(keyFramesR);
+
+        var zRot1 = new BABYLON.Animation("zRot", "rotation.z", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesZ = []; 
+        keyFramesZ.push({
+           frame: 0,
+           value: -Math.PI/2
+        });
+        keyFramesZ.push({
+           frame: 1,
+           value: -Math.PI/4
+        });
+        keyFramesZ.push({
+           frame: 5,
+           value: -Math.PI/2
+        });
+        zRot1.setKeys(keyFramesZ);
+
+//animation for going left
+        var yRot2 = new BABYLON.Animation("yRot", "rotation.y", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesR1 = []; 
+        keyFramesR1.push({
+           frame: 0,
+           value: 0
+        });
+        keyFramesR1.push({
+           frame: 1,
+           value: -Math.PI/8
+        });
+        keyFramesR1.push({
+           frame: 5,
+           value: 0
+        });
+        yRot2.setKeys(keyFramesR1);
+
+        var zRot2 = new BABYLON.Animation("zRot", "rotation.z", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesZ1 = []; 
+        keyFramesZ1.push({
+           frame: 0,
+           value: -Math.PI/2
+        });
+        keyFramesZ1.push({
+           frame: 1,
+           value: -3*Math.PI/4
+        });
+        keyFramesZ1.push({
+           frame: 5,
+           value: -Math.PI/2
+        });
+        zRot2.setKeys(keyFramesZ1);
+
+//animation for move up
+        var xRot = new BABYLON.Animation("xRot", "rotation.x", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesX = []; 
+        keyFramesX.push({
+           frame: 0,
+           value: 0
+        });
+        keyFramesX.push({
+           frame: 1,
+           value: Math.PI/4
+        });
+        keyFramesX.push({
+           frame: 5,
+           value: 0
+        });
+        xRot.setKeys(keyFramesX);
+
+//animatiopn for move down
+        var xRot1 = new BABYLON.Animation("xRot", "rotation.x", 
+        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
+        var keyFramesX1 = []; 
+        keyFramesX1.push({
+           frame: 0,
+           value: 0
+        });
+        keyFramesX1.push({
+           frame: 1,
+           value: -Math.PI/4
+        });
+        keyFramesX1.push({
+           frame: 5,
+           value: 0
+        });
+        xRot1.setKeys(keyFramesX1);
+
         BABYLON.SceneLoader.ImportMesh("", "", "airplane1.babylon", scene, function (newMeshes) {
             airplane = newMeshes[0];
             setup(airplane);
             camera.lockedTarget = airplane; //version 2.5 onwards
+            scene.registerAfterRender(function() {
+                airplane.position.z -=0.1 ;
+            })
 
+            airplane.animations = [];
+
+            window.addEventListener('keydown', function (event) {
+                if (event.keyCode == 39) {
+                    airplane.animations.push(yRot1);
+                    airplane.animations.push(zRot1);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 37) {
+                    airplane.animations.push(yRot2);
+                    airplane.animations.push(zRot2);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 38) {
+                    airplane.animations.push(xRot);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                }
+                if (event.keyCode == 40) {
+                    airplane.animations.push(xRot1);
+                    scene.beginAnimation(airplane, 0, 10, false);
+                    airplane.animations.pop();
+                }
+            })
         });
 
         // simple wireframe material
         var material = new BABYLON.StandardMaterial('material', scene);
+        material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
         material.wireframe = true;
         land.material = material;
 
-
         return scene;
+
+
     }
 
     var scene = createScene();
@@ -88,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function () {
         scene.render();
     });
 });
+
 
 
 function setup(mesh) {
@@ -99,14 +237,19 @@ function setup(mesh) {
     mesh.scaling = new BABYLON.Vector3(1, 1 / 16, 1 / 8);
     mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
 
+
     window.addEventListener('keydown', function (event) {
         if (event.keyCode == 39) {
-            mesh.position = new BABYLON.Vector3(meshX - meshAdd, meshY, meshZ);
+            mesh.position = new BABYLON.Vector3(meshX - meshAdd, meshY, meshZ-meshAdd);
             meshX = meshX - meshAdd;
+            meshZ = meshZ - meshAdd;
+            // mesh.rotation.y = Math.PI/16;
+            // setTimeout(rotate,500);
         }
         if (event.keyCode == 37) {
-            mesh.position = new BABYLON.Vector3(meshX + meshAdd, meshY, meshZ);
+            mesh.position = new BABYLON.Vector3(meshX + meshAdd, meshY, meshZ-meshAdd);
             meshX = meshX + meshAdd;
+            meshZ = meshZ - meshAdd;
         }
         if (event.keyCode == 38) {
             mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ + meshAdd);
@@ -117,4 +260,9 @@ function setup(mesh) {
             meshZ = meshZ + meshAdd;
         }
     })
+
+    // function rotate() {
+    //     mesh.rotation.y = 0;
+    // }
 }
+
