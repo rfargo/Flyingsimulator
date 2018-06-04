@@ -21,10 +21,6 @@
 //         });
 
 
-
-
-
-
         //create a FreeCamera, and set its position to (x:0, y:4, z:-10)
         // camera = new BABYLON.FreeCamera('camera', new BABYLON.Vector3(0, 50,100), scene);
 
@@ -67,3 +63,39 @@
 
         // attach the camera to the canvas
        // camera.attachControl(canvas,true);
+
+
+//From FP Team 1
+
+           // ---------------------------------------------- scoreboard -----------------------------------------------
+    // var scoreboard = new BABYLON.ScreenSpaceCanvas2D(scene, {
+    //     id: "ScreenCanvas", parent:canvas, x:screenW+(1.75/100*screenW), y:screenH+(6.3/100*screenH),
+    //     size: new BABYLON.Size(250, 100),
+    //     backgroundFill: "#4040408F",
+    //     backgroundRoundRadius: 25,
+    // });
+    // scoreboard.levelVisible = false;
+ 
+    // var scoreValue = new BABYLON.Text2D("Score : "+score, {
+    //     parent : scoreboard,
+    //     id: "text",
+    //     marginAlignment: "h: center, v:center",
+    //     fontName: "20pt Arial",
+    // });
+
+
+                // Importing background music named insaniquarium.mp3
+//var music = new BABYLON.Sound("music", "insaniquarium.mp3", scene, null, { loop: false, autoplay: true });
+//https://doc.babylonjs.com/how_to/playing_sounds_and_music
+
+
+        //--to rotate plane
+
+       //  window.addEventListener('keydown',function(event){
+       //   if(event.keyCode == 39 ){
+       //    camera.rotationOffset = camera.rotationOffset + Math.PI / 8;
+       //   }
+       //   if(event.keyCode == 37 ){
+       //    camera.rotationOffset = camera.rotationOffset - Math.PI / 8;
+       //   }
+       // })
