@@ -12,6 +12,8 @@
         //create scene
           scene = new BABYLON.Scene(engine); //play scene
 
+          scene.enablePhysics();
+
           scene.clearColor = new BABYLON.Color3(0.2, 0.5, 0.9);
           scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
 
@@ -30,30 +32,30 @@
           skybox.material = skyboxMaterial;
 
 
-// Parameters: name, position, scene    
-var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
+          // Parameters: name, position, scene    
+          var camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
 
-//The goal distance of camera from target
-camera.radius = 30;
+          //The goal distance of camera from target
+          camera.radius = 25;
 
-// The goal height of camera above local origin (centre) of target
-camera.heightOffset = 20;
+          // The goal height of camera above local origin (centre) of target
+          camera.heightOffset = 10;
 
-// The goal rotation of camera around local origin (centre) of target in x y plane
-camera.rotationOffset = 0;
+          // The goal rotation of camera around local origin (centre) of target in x y plane
+          camera.rotationOffset = 0;
 
-//Acceleration of camera in moving from current to goal position
-camera.cameraAcceleration = 0.005
+          //Acceleration of camera in moving from current to goal position
+          camera.cameraAcceleration = 0.5;
 
-//The speed at which acceleration is halted 
-camera.maxCameraSpeed = 10
+          //The speed at which acceleration is halted 
+          camera.maxCameraSpeed = 100;
 
-// This attaches the camera to the canvas
-   camera.attachControl(canvas, true);
+          // This attaches the camera to the canvas
+          camera.attachControl(canvas, true);
 
-// NOTE:: SET CAMERA TARGET AFTER THE TARGET'S CREATION AND NOTE CHANGE FROM BABYLONJS V 2.5
-//targetMesh created here
-
+          //music doo doo doo doo
+          // var music = new BABYLON.Sound("Music", "baby-shark.mp3", scene, null, 
+          //   { loop: true, autoplay: true });
 
         // create a basic light, aiming 0,8,0
         var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0,8,0), scene);
@@ -66,24 +68,29 @@ camera.maxCameraSpeed = 10
                 40,  // number of subdivisions
                 0,   // min height
                 50,  // max height
-                scene
+                scene,
+                function () {
+                  ground.physicsImpostor = new BABYLON.PhysicsImpostor(
+                    ground, BABYLON.PhysicsImpostor.HeightmapImpostor, { mass: 0 });
+                }
             );
         box.position = new BABYLON.Vector3(0,0,0);
-        
+
       BABYLON.SceneLoader.ImportMesh("","","airplane1.babylon", scene, function(newMeshes){
         airplane = newMeshes[0];
         setup(airplane);
         camera.lockedTarget = airplane; //version 2.5 onwards
-
+            scene.registerAfterRender(function() {
+              airplane.position.z -=0.1 ;
+            })
       });
 
 
         // simple wireframe material
         var material = new BABYLON.StandardMaterial('material', scene);
-        //material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
+        material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
         material.wireframe = true;
         box.material = material;
-
 
         return scene;
         }
@@ -91,21 +98,14 @@ camera.maxCameraSpeed = 10
         var scene = createScene();
 
        engine.runRenderLoop(function() {
+            function movement(mesh){
+              mesh.position.z = mesh.position.z+1;
+            }
             scene.render();
         });
+
     });
     
-
-      function setupStart(mesh){
-        meshX = 0;
-        meshY = 0;
-        meshZ = 50;
-        meshAdd = 1;
-
-        mesh.scaling = new BABYLON.Vector3(1,1/16,1/8);
-        mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
-      }
-
 
       function setup(mesh){
         meshX = 0;
@@ -118,24 +118,28 @@ camera.maxCameraSpeed = 10
 
         window.addEventListener('keydown',function(event){
          if(event.keyCode == 39 ){
-           mesh.position = new BABYLON.Vector3(meshX-meshAdd,meshY,meshZ);
+           mesh.position = new BABYLON.Vector3(meshX-meshAdd,meshY,meshZ+meshAdd);
            meshX = meshX-meshAdd;
+           meshZ = meshZ+meshAdd;
+           //mesh.rotate(BABYLON.Axis.Y, Math.PI / 8, BABYLON.Space.WORLD); 
             // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(-1,0,0), box.getAbsolutePosition());
          }
          if(event.keyCode == 37 ){
-            mesh.position = new BABYLON.Vector3(meshX+meshAdd,meshY,meshZ);
-            meshX = meshX+meshAdd;            
+            mesh.position = new BABYLON.Vector3(meshX+meshAdd,meshY,meshZ+meshAdd);
+            meshX = meshX+meshAdd;
+            meshZ = meshZ+meshAdd;    
+            //mesh.rotate(BABYLON.Axis.X, - Math.PI / 18, BABYLON.Space.LOCAL);  
             // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(1,0,0), box.getAbsolutePosition());
          }
-         if(event.keyCode == 38 ){
-            mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ+meshAdd);
-            meshZ = meshZ-meshAdd;            
-            // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,1), box.getAbsolutePosition());
-         }
-         if(event.keyCode == 40 ){
-            mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ-meshAdd);
-            meshZ = meshZ+meshAdd;            
-            // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,-1), box.getAbsolutePosition());
-         }
+         // if(event.keyCode == 38 ){
+         //    mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ+meshAdd);
+         //    meshZ = meshZ-meshAdd;
+         //    // mesh.applyImpulse(new BABYLON.Vector3(0,0,1), mesh.getAbsolutePosition());
+         // }
+         // if(event.keyCode == 40 ){
+         //    mesh.position = new BABYLON.Vector3(meshX,meshY,meshZ-meshAdd);
+         //    meshZ = meshZ+meshAdd;            
+         //    // box.physicsImpostor.applyImpulse(new BABYLON.Vector3(0,0,-1), box.getAbsolutePosition());
+         // }
         })
       }
