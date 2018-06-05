@@ -1,16 +1,49 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="utf-8">
-	<title>Go Far!</title>
-	<script type="text/javascript" src="js/babylon.custom.js"></script>
-	<script type="text/javascript" src="js/cannon.js"></script>
-	<script type="text/javascript" src="js/initScene.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/styles.css">
+    <meta charset="utf-8">
+    <title>Go Far!</title>
+    <script type="text/javascript" src="js/babylon.custom.js"></script>
+    <script type="text/javascript" src="js/initScene.js"></script>
+    <script type="text/javascript" src="js/cannon.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="css/styles.css">
+    <script>
+        $(document).ready(function () {
+            let element = document.getElementById("start");
+            element.style.display = "block";
+        });
 
+        function play() {
+            toggleStartPage();
+            renderCanvas();
+        }
+
+        function renderCanvas() {
+            _render();
+        }
+
+        function toggleStartPage() {
+            let element = document.getElementById("start");
+            if (element.style.display === "block") {
+                element.style.display = "none";
+            }
+            else {
+                element.style.display = "block";
+            }
+        }
+    </script>
 </head>
 <body>
-	<canvas id="renderCanvas"></canvas>
-	<script></script>
+    <div id="start">
+        <h1> Go Far </h1>
+        <button type="button" class="btn btn-default btn-lg" onclick="play()">Play</button>
+    </div>
+    <div id="ingame">
+        <canvas id='renderCanvas'></canvas>
+    </div>
 </body>
 </html>
