@@ -40,10 +40,10 @@ document.addEventListener('DOMContentLoaded', function () {
         camera.rotationOffset = 0;
 
         //Acceleration of camera in moving from current to goal position
-        camera.cameraAcceleration = 0.005
+        camera.cameraAcceleration = 0.005;
 
         //The speed at which acceleration is halted
-        camera.maxCameraSpeed = 10
+        camera.maxCameraSpeed = 10;
 
         // This attaches the camera to the canvas
         camera.attachControl(canvas, true);
@@ -102,7 +102,8 @@ document.addEventListener('DOMContentLoaded', function () {
             camera.lockedTarget = airplane; //version 2.5 onwards
             airplane.animations = []; //for animation
             scene.registerBeforeRender(function() {
-                airplane.position.z -=0.1 ;
+
+                airplane.position.z -= 0.1;
 
                 for(var i = 0; i <= torus.length-1; i++){
                     if(torus[i].intersectsMesh(airplane, false)){
@@ -277,7 +278,6 @@ function setup(mesh) {
 
     mesh.scaling = new BABYLON.Vector3(1, 1 / 16, 1 / 8);
     mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
-
 
     window.addEventListener('keydown', function (event) {
         if (event.keyCode == 39) {
