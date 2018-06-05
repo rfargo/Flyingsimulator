@@ -6,10 +6,15 @@ document.addEventListener('DOMContentLoaded', function () {
     //create babylon engine
     engine = new BABYLON.Engine(canvas, true);
 
+    var physicsEngine = new BABYLON.CannonJSPlugin();
+    var gravity = new BABYLON.Vector3(0,-9.81,0);
+
     var createScene = function () {
         //create scene
         scene = new BABYLON.Scene(engine); //play scene
 
+        scene.enablePhysics(physicsEngine);
+        
         scene.clearColor = new BABYLON.Color3(0.2, 0.5, 0.9);
         scene.ambientColor = new BABYLON.Color3(0.3, 0.3, 0.3);
 
@@ -249,6 +254,8 @@ document.addEventListener('DOMContentLoaded', function () {
         xRot1.setKeys(keyFramesX1);
 
 
+
+
         // simple wireframe material
         var material = new BABYLON.StandardMaterial('material', scene);
         material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
@@ -261,6 +268,7 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     var scene = createScene();
+
 
     engine.runRenderLoop(function () {
         scene.render();
@@ -278,14 +286,18 @@ function setup(mesh) {
     mesh.scaling = new BABYLON.Vector3(1, 1 / 16, 1 / 8);
     mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
 
+    //enable physics
+   
+    mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.MeshImpostor, {mass: 1, restitution: 0.9, friction: 0.2}, scene);
+
 
     window.addEventListener('keydown', function (event) {
         if (event.keyCode == 39) {
-            mesh.position = new BABYLON.Vector3(meshX - meshAdd, meshY, meshZ-meshAdd);
-            meshX = meshX - meshAdd;
-            meshZ = meshZ - meshAdd;
-            // mesh.rotation.y = Math.PI/16;
-            // setTimeout(rotate,500);
+            // mesh.position = new BABYLON.Vector3(meshX - meshAdd, meshY, meshZ-meshAdd);
+            // meshX = meshX - meshAdd;
+            // meshZ = meshZ - meshAdd;
+            mesh.physicsImpostor.applyImpulse(new BABYLON.Vector3(10,0,0), mesh.getAbsolutePosition());
+        
         }
         if (event.keyCode == 37) {
             mesh.position = new BABYLON.Vector3(meshX + meshAdd, meshY, meshZ-meshAdd);
@@ -302,8 +314,5 @@ function setup(mesh) {
         }
     })
 
-    // function rotate() {
-    //     mesh.rotation.y = 0;
-    // }
 }
 
