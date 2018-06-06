@@ -2,7 +2,20 @@ var canvas, engine, scene, airplane, camera, physicsEngine, scoreText, timerText
 var score = 0;
 var torus;
 var timer = 0, timeleft = 60;
-const gravity = new BABYLON.Vector3(0, -9.81, 0);
+var keysDown = {};
+// units per second
+var airSpeed = -10;
+
+
+// degrees per second
+var turnSpeed = 20.0;
+
+// keep track of the last time movement was processed, in microseconds
+var lastFrame = -1;
+
+// keypress listeners
+document.onkeydown = handleKeyDown;
+document.onkeyup = handleKeyUp;
 
 document.addEventListener('DOMContentLoaded', function () {
     //get canvas
@@ -11,9 +24,8 @@ document.addEventListener('DOMContentLoaded', function () {
     //create babylon engine
     engine = new BABYLON.Engine(canvas, true);
 
-    physicsEngine = new BABYLON.CannonJSPlugin();
+   
     scene = new BABYLON.Scene(engine); //play scene
-    scene.enablePhysics(physicsEngine);
 
     createScene();
     createCamera();
@@ -21,6 +33,7 @@ document.addEventListener('DOMContentLoaded', function () {
     createAirplane();
     createScoreboard();
     createTimer();
+    createSpeedometer();
     createLoop();
 });
 
@@ -55,11 +68,11 @@ function createLand() {
     var land = BABYLON.Mesh.CreateGroundFromHeightMap(
         'island',
         'island_heightmap.png',
-        500, // width of the ground mesh (x axis)
-        100, // depth of the ground mesh (z axis)
+        1000, // width of the ground mesh (x axis)
+        1000, // depth of the ground mesh (z axis)
         40,  // number of subdivisions
         0,   // min height
-        10,  // max height
+        20,  // max height
         scene
     );
     land.position = new BABYLON.Vector3(0, 0, 0);
@@ -120,13 +133,101 @@ function setupAirplane(mesh) {
     mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ);
 
     //enable physics
-    mesh.physicsImpostor = new BABYLON.PhysicsImpostor(mesh, BABYLON.PhysicsImpostor.MeshImpostor, {
-        mass: 1,
-        restitution: 0.9,
-        friction: 0.2
-    }, scene);
 
 }
+
+function handleKeyDown(event) {
+        keysDown[event.keyCode] = true;
+    }
+
+    function handleKeyUp(event) {
+        keysDown[event.keyCode] = false;
+    }
+
+    // Converts from degrees to radians.
+    function degToRad(degrees) {
+        return degrees * Math.PI / 180;
+    }
+
+
+    function animate() {
+        var current = new Date().getTime();
+        if (lastFrame == -1) {
+            lastFrame = current;
+        }
+
+        // we want the time in seconds for simplicity
+        var elapsed = (current - lastFrame) / 1000.0;
+        lastFrame = current;
+
+
+        var zRot = 0;
+        var yRot = 0;
+        var xRot = 0;
+
+
+        // handle keys here
+        if(keysDown[87]) {
+            // W, rotate in the negative direction about the x axis
+           yRot -= elapsed * turnSpeed;
+        }
+
+        if(keysDown[83]) {
+            // S, rotate in the positive direction about the x axis
+           
+            yRot += elapsed * turnSpeed;
+            
+        }
+
+        if(keysDown[65]) {
+            // A, rotate in the negative direction about the z axis
+            zRot -= elapsed * turnSpeed;
+        }
+
+        if(keysDown[68]) {
+            // D, rotate in the positive direction about the z axis
+            zRot += elapsed * turnSpeed;
+            
+        }
+
+        if(keysDown[81]) {
+            // Q, rotate left  
+            xRot += elapsed * turnSpeed;
+        }
+
+        if(keysDown[69]) {
+            // E, rotate right 
+            xRot -= elapsed * turnSpeed;
+        }
+
+        if(keysDown[90]) {
+            // z, speed up 
+            airSpeed = airSpeed - 1;
+        
+           
+        }
+
+        if(keysDown[88]) {
+            // x, speed down 
+            if (airSpeed<0){
+                airSpeed = airSpeed + 1;
+                
+            }
+            
+        }
+
+        // =============================================================================
+
+        airplane.translate(BABYLON.Axis.Z, elapsed + airSpeed/10, BABYLON.Space.LOCAL);
+
+        airplane.rotate(BABYLON.Axis.X, xRot/10, BABYLON.Space.LOCAL);
+        airplane.rotate(BABYLON.Axis.Y, yRot/10, BABYLON.Space.LOCAL);
+        airplane.rotate(BABYLON.Axis.Z, zRot/10, BABYLON.Space.LOCAL);
+
+        // =============================================================================
+     
+
+    }
 
 function createLoop() {
     var newTorus = new BABYLON.Sound("new", "sound/COINS.wav", scene,
@@ -175,9 +276,7 @@ function createScoreboard() {
 
 function logicForAirplane() {
     scene.registerBeforeRender(function () {
-        setTimeout(() => {
-            airplane.position.z -= 0.1;
-        }, 5000);
+        
 
         if (torus.intersectsMesh(airplane, false)) {
             var hitTorus = new BABYLON.Sound("hit", "sound/SUCCESS.wav", scene,
@@ -189,6 +288,8 @@ function logicForAirplane() {
             createLoop();
         }
         scoreText.text = "Score = " + score;
+        speedText.text = "Speed = " + (-airSpeed);
+        animate();
     })
 }
 
@@ -220,6 +321,20 @@ function createTimer() {
 
     advancedTexture.addControl(timerText);
 }
+
+function createSpeedometer() {
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    speedText = new BABYLON.GUI.TextBlock();
+    speedText.text = "Speed = " + (-airSpeed);
+    speedText.color = "black";
+    speedText.fontSize = 24;
+    speedText.left = '17%';
+    speedText.top = '-45%';
+
+    advancedTexture.addControl(speedText);
+}
+
 
 function startTimer(duration) {
     timer = duration;
