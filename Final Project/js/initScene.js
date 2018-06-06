@@ -1,5 +1,5 @@
 var canvas, engine, scene, airplane, camera, physicsEngine, scoreText, timerText, bgmMusic, torus;
-var score = 0, timer = 0, timeleft = 5;
+var score = 0, timer = 0, timeleft = 60;
 
 var airSpeed = -10; // units per second
 var turnSpeed = 20.0; // degrees per second
