@@ -45,6 +45,10 @@ function createScene() {
     // create a basic light, aiming 0,8,0
     var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
 
+   var bgmMusic = new BABYLON.Sound("Music", "sound/ENGINE.wav", scene, null, 
+                { loop: true, autoplay: true });
+
+
 }
 function createLand(){
     var land = BABYLON.Mesh.CreateGroundFromHeightMap(
@@ -271,7 +275,11 @@ function setupAirplane(mesh) {
     })
 
 }
+
 function createLoop() {
+    var newTorus = new BABYLON.Sound("new", "sound/COINS.wav", scene,
+                   function () {newTorus.play();});
+
     if(torus == undefined) {
         torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 5}, scene);
         torus.position = new BABYLON.Vector3(0, 35, 30);
@@ -282,7 +290,6 @@ function createLoop() {
         torus.position = new BABYLON.Vector3(airplane.position.x + Math.floor((Math.random()* 21) - 10), airplane.position.y + Math.floor((Math.random()* 21) - 10), airplane.position.z - 20);
         torus.rotation.x = Math.PI / 2;
     }
-
     var myMaterial = new BABYLON.StandardMaterial("myMaterial", scene);
     myMaterial.diffuseColor = new BABYLON.Color3(1, 1, 0);
     torus.material = myMaterial;
@@ -302,7 +309,6 @@ function createScoreboard() {
     advancedTexture.addControl(scoreText);
 }
 
-
 function logicForAirplane(){
     scene.registerBeforeRender(function() {
         setTimeout(() => {
@@ -310,6 +316,8 @@ function logicForAirplane(){
         },5000);
 
         if (torus.intersectsMesh(airplane, false)) {
+            var hitTorus = new BABYLON.Sound("hit", "sound/SUCCESS.wav", scene,
+                            function () {hitTorus.play();});
             torus.dispose();
             score += 1;
             createLoop();
