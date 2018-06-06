@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function () {
 });
 
 
-
 function createScene() {
     //create scene
     scene.clearColor = new BABYLON.Color3(0.2, 0.5, 0.9);
@@ -48,8 +47,9 @@ function createScene() {
     // create a basic light, aiming 0,8,0
     var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
 
-   var bgmMusic = new BABYLON.Sound("Music", "sound/ENGINE.wav", scene, null, 
-                { loop: true, autoplay: true });
+    var bgmMusic = new BABYLON.Sound("Music", "sound/ENGINE.wav", scene, null,
+        {loop: true, autoplay: true});
+}
 
 function createLand() {
     var land = BABYLON.Mesh.CreateGroundFromHeightMap(
@@ -130,7 +130,9 @@ function setupAirplane(mesh) {
 
 function createLoop() {
     var newTorus = new BABYLON.Sound("new", "sound/COINS.wav", scene,
-                   function () {newTorus.play();});
+        function () {
+            newTorus.play();
+        });
 
     if (torus == undefined) {
         torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 5}, scene);
@@ -171,15 +173,17 @@ function createScoreboard() {
 }
 
 
-function logicForAirplane(){
-    scene.registerBeforeRender(function() {
+function logicForAirplane() {
+    scene.registerBeforeRender(function () {
         setTimeout(() => {
             airplane.position.z -= 0.1;
         }, 5000);
 
         if (torus.intersectsMesh(airplane, false)) {
             var hitTorus = new BABYLON.Sound("hit", "sound/SUCCESS.wav", scene,
-                            function () {hitTorus.play();});
+                function () {
+                    hitTorus.play();
+                });
             torus.dispose();
             score += 1;
             createLoop();
@@ -232,4 +236,6 @@ function startTimer(duration) {
         }
     }, 1000);
 }
+
+
 
