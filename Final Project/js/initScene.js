@@ -1,7 +1,7 @@
-var canvas, engine, scene, airplane, camera, physicsEngine, scoreText;
+var canvas, engine, scene, airplane, camera, physicsEngine, scoreText, timerText;
 var score = 0;
 var torus;
-
+var timer = 0, timeleft = 60;
 const gravity = new BABYLON.Vector3(0, -9.81, 0);
 
 document.addEventListener('DOMContentLoaded', function () {
@@ -20,8 +20,11 @@ document.addEventListener('DOMContentLoaded', function () {
     createLand();
     createAirplane();
     createScoreboard();
+    createTimer();
     createLoop();
 });
+
+
 
 function createScene() {
     //create scene
@@ -44,9 +47,10 @@ function createScene() {
 
     // create a basic light, aiming 0,8,0
     var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
-
 }
-function createLand(){
+
+
+function createLand() {
     var land = BABYLON.Mesh.CreateGroundFromHeightMap(
         'island',
         'island_heightmap.png',
@@ -61,10 +65,14 @@ function createLand(){
 
     // simple wireframe material
     var material = new BABYLON.StandardMaterial('material', scene);
-    material.diffuseTexture = new BABYLON.Texture('island_heightmap.png', scene);
-    material.wireframe = true;
+    material.diffuseTexture = new BABYLON.Texture('land.jpg', scene);
+    material.specularPower = 100000000;
+
+    //material.wireframe = true;
     land.material = material;
+    //var gr = createGrass();
 }
+
 function createCamera() {
     // Parameters: name, position, scene
     camera = new BABYLON.FollowCamera("FollowCam", new BABYLON.Vector3(0, 10, -10), scene);
@@ -85,16 +93,22 @@ function createCamera() {
     camera.maxCameraSpeed = 10;
 
     // This attaches the airplane to the canvas
-    camera.attachControl(canvas, true);
+    //camera.attachControl(canvas, true);
 }
+
 function createAirplane() {
     BABYLON.SceneLoader.ImportMesh("", "", "airplane1.babylon", scene, function (newMeshes) {
         airplane = newMeshes[0];
         setupAirplane(airplane);
         camera.lockedTarget = airplane; //version 2.5 onwards
+        setTimeout(() => {
+            startTimer(59);
+        }, 5000);
         logicForAirplane();
     });
 }
+
+
 function setupAirplane(mesh) {
     meshX = 0;
     meshY = 35;
@@ -111,175 +125,26 @@ function setupAirplane(mesh) {
         friction: 0.2
     }, scene);
 
-
-    airplane.animations = []; //for animation
-
-    window.addEventListener('keydown', function (event) {
-        if (event.keyCode == 39) {
-            airplane.animations.push(yRot1);
-            airplane.animations.push(zRot1);
-            scene.beginAnimation(airplane, 0, 10, false);
-            airplane.animations.pop();
-            airplane.animations.pop();
-        }
-        if (event.keyCode == 37) {
-            airplane.animations.push(yRot2);
-            airplane.animations.push(zRot2);
-            scene.beginAnimation(airplane, 0, 10, false);
-            airplane.animations.pop();
-            airplane.animations.pop();
-        }
-        if (event.keyCode == 38) {
-            airplane.animations.push(xRot);
-            scene.beginAnimation(airplane, 0, 10, false);
-            airplane.animations.pop();
-        }
-        if (event.keyCode == 40) {
-            airplane.animations.push(xRot1);
-            scene.beginAnimation(airplane, 0, 10, false);
-            airplane.animations.pop();
-        }
-    })
-
-    //animation for going right
-    var yRot1 = new BABYLON.Animation("yRot", "rotation.y",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesR = [];
-    keyFramesR.push({
-        frame: 0,
-        value: 0
-    });
-    keyFramesR.push({
-        frame: 1,
-        value: Math.PI / 8
-    });
-    keyFramesR.push({
-        frame: 5,
-        value: 0
-    });
-    yRot1.setKeys(keyFramesR);
-
-    var zRot1 = new BABYLON.Animation("zRot", "rotation.z",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesZ = [];
-    keyFramesZ.push({
-        frame: 0,
-        value: -Math.PI / 2
-    });
-    keyFramesZ.push({
-        frame: 1,
-        value: -Math.PI / 4
-    });
-    keyFramesZ.push({
-        frame: 5,
-        value: -Math.PI / 2
-    });
-    zRot1.setKeys(keyFramesZ);
-
-    //animation for going left
-    var yRot2 = new BABYLON.Animation("yRot", "rotation.y",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesR1 = [];
-    keyFramesR1.push({
-        frame: 0,
-        value: 0
-    });
-    keyFramesR1.push({
-        frame: 1,
-        value: -Math.PI / 8
-    });
-    keyFramesR1.push({
-        frame: 5,
-        value: 0
-    });
-    yRot2.setKeys(keyFramesR1);
-
-    var zRot2 = new BABYLON.Animation("zRot", "rotation.z",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesZ1 = [];
-    keyFramesZ1.push({
-        frame: 0,
-        value: -Math.PI / 2
-    });
-    keyFramesZ1.push({
-        frame: 1,
-        value: -3 * Math.PI / 4
-    });
-    keyFramesZ1.push({
-        frame: 5,
-        value: -Math.PI / 2
-    });
-    zRot2.setKeys(keyFramesZ1);
-
-    //animation for move up
-    var xRot = new BABYLON.Animation("xRot", "rotation.x",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesX = [];
-    keyFramesX.push({
-        frame: 0,
-        value: 0
-    });
-    keyFramesX.push({
-        frame: 1,
-        value: Math.PI / 4
-    });
-    keyFramesX.push({
-        frame: 5,
-        value: 0
-    });
-    xRot.setKeys(keyFramesX);
-
-    //animation for move down
-    var xRot1 = new BABYLON.Animation("xRot", "rotation.x",
-        10, BABYLON.Animation.ANIMATIONTYPE_FLOAT, BABYLON.Animation.ANIMATIONLOOPMODE_CYCLE);
-    var keyFramesX1 = [];
-    keyFramesX1.push({
-        frame: 0,
-        value: 0
-    });
-    keyFramesX1.push({
-        frame: 1,
-        value: -Math.PI / 4
-    });
-    keyFramesX1.push({
-        frame: 5,
-        value: 0
-    });
-    xRot1.setKeys(keyFramesX1);
-
-    window.addEventListener('keydown', function (event) {
-        if (event.keyCode == 39) {
-            mesh.position = new BABYLON.Vector3(meshX - meshAdd, meshY, meshZ - meshAdd);
-            meshX = meshX - meshAdd;
-            meshZ = meshZ - meshAdd;
-            mesh.physicsImpostor.applyImpulse(new BABYLON.Vector3(10, 0, 0), mesh.getAbsolutePosition());
-
-        }
-        if (event.keyCode == 37) {
-            mesh.position = new BABYLON.Vector3(meshX + meshAdd, meshY, meshZ - meshAdd);
-            meshX = meshX + meshAdd;
-            meshZ = meshZ - meshAdd;
-        }
-        if (event.keyCode == 38) {
-            mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ + meshAdd);
-            meshZ = meshZ - meshAdd;
-        }
-        if (event.keyCode == 40) {
-            mesh.position = new BABYLON.Vector3(meshX, meshY, meshZ - meshAdd);
-            meshZ = meshZ + meshAdd;
-        }
-    })
-
 }
+
 function createLoop() {
-    if(torus == undefined) {
+    if (torus == undefined) {
         torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 5}, scene);
         torus.position = new BABYLON.Vector3(0, 35, 30);
         torus.rotation.x = Math.PI / 2;
     }
     else {
         torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 5}, scene);
-        torus.position = new BABYLON.Vector3(airplane.position.x + Math.floor((Math.random()* 21) - 10), airplane.position.y + Math.floor((Math.random()* 21) - 10), airplane.position.z - 20);
+
+        var posX = airplane.position.x + Math.floor((Math.random() * 21) - 10);
+        var posY = airplane.position.y + Math.floor((Math.random() * 21) - 10);
+        var posZ = airplane.position.z - 20;
+
+        if (posY < 10) {
+            posY = posY + Math.floor((Math.random() * 10) + 1);
+        }
+
+        torus.position = new BABYLON.Vector3(posX, posY, posZ);
         torus.rotation.x = Math.PI / 2;
     }
 
@@ -296,18 +161,17 @@ function createScoreboard() {
     scoreText.text = "Score = " + score;
     scoreText.color = "black";
     scoreText.fontSize = 24;
-    scoreText.right = '10%';
-    scoreText.top = '-45%'
+    scoreText.left = -100;
+    scoreText.top = '-45%';
 
     advancedTexture.addControl(scoreText);
 }
 
-
-function logicForAirplane(){
-    scene.registerBeforeRender(function() {
+function logicForAirplane() {
+    scene.registerBeforeRender(function () {
         setTimeout(() => {
             airplane.position.z -= 0.1;
-        },5000);
+        }, 5000);
 
         if (torus.intersectsMesh(airplane, false)) {
             torus.dispose();
@@ -321,5 +185,45 @@ function logicForAirplane(){
 function _render() {
     engine.runRenderLoop(function () {
         scene.render();
+        if (timeleft === 0) {
+            engine.stopRenderLoop();
+            let e1 = document.getElementById("ingame");
+            e1.style.display = "none";
+
+            let element = document.getElementById("end");
+            element.style.display = "block";
+            $("#end h3").html("Score: " + score);
+        }
     });
 }
+
+
+function createTimer() {
+    var advancedTexture = BABYLON.GUI.AdvancedDynamicTexture.CreateFullscreenUI("UI");
+
+    timerText = new BABYLON.GUI.TextBlock();
+    timerText.text = "Timer = " + timeleft;
+    timerText.color = "black";
+    timerText.fontSize = 24;
+    timerText.left = '5%';
+    timerText.top = '-45%';
+
+    advancedTexture.addControl(timerText);
+}
+
+function startTimer(duration) {
+    timer = duration;
+    var seconds;
+    setInterval(function () {
+        seconds = parseInt(timer % 60);
+        console.log(seconds);
+
+        timeleft = seconds;
+        timerText.text = "Timer = " + timeleft;
+
+        if (--timer < 0) {
+            timer = duration;
+        }
+    }, 1000);
+}
+
