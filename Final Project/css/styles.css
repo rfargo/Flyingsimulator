@@ -23,8 +23,20 @@ html, body{
 
 h1 {
 	font-size: 200px;
-	margin-top: 0;
 	padding-top: 15%;
+	color: white;
+}
+
+h2 {
+	font-size: 100px;
+	padding-top: 15%;
+	margin:0;
+	color: white;
+}
+
+h3 {
+	font-size: 50px;
+	margin: 0;
 	color: white;
 }
 
@@ -32,6 +44,12 @@ h1 {
 	touch-action : none;
 }
 
+#end .btn {
+	font-size: 20px;
+	margin: 10px;
+	padding-left: 5%;
+	padding-right: 5%;
+}
 .btn{
 	font-family : inherit;
 	font-size: 50px;
@@ -40,7 +58,10 @@ h1 {
 }
 
 #end{
+	margin: 0;
 	background: url("../wallpaper.jpg") no-repeat center fixed;
 	background-size: 100% auto;
 	text-align: center;
+	width: 100%;
+	height: 100%;
 }

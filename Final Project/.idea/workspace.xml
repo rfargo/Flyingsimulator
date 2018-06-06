@@ -14,29 +14,20 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="index.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="index.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/index.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+            <state relative-caret-position="195">
+              <caret line="13" column="7" lean-forward="true" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="game.html" pinned="false" current-in-tab="true">
+      <file leaf-file-name="game.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/game.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="225">
-              <caret line="15" column="43" lean-forward="true" selection-start-line="15" selection-start-column="43" selection-end-line="15" selection-end-column="43" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="initScene.js" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/js/initScene.js">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+            <state relative-caret-position="240">
+              <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
             </state>
           </provider>
         </entry>
@@ -44,8 +35,35 @@
       <file leaf-file-name="styles.css" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/css/styles.css">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="22" selection-start-line="22" selection-end-line="22" />
+            <state relative-caret-position="720">
+              <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="initScene.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/js/initScene.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="555">
+              <caret line="197" column="19" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
+              <folding>
+                <element signature="n#!!block;n#handleKeyDown#0" />
+                <element signature="n#!!block;n#handleKeyUp#0" />
+                <element signature="e#491#864#0" />
+                <element signature="n#!!block;n#createScene#0" />
+                <element signature="n#!!block;n#createCamera#0" />
+                <element signature="n#!!block;n#createAirplane#0" />
+                <element signature="n#!!block;n#logicForAirplane#0" />
+                <element signature="n#!!block;n#createLoop#0" />
+                <element signature="n#!!block;n#showTimer#0" />
+                <element signature="n#!!block;n#showScoreboard#0" />
+                <element signature="n#!!block;n#createSpeedometer#0" />
+                <element signature="n#!!block;n#createTimer#1" />
+                <element signature="n#!!block;n#animate#0" />
+                <element signature="n#!!block;n#startGame#0" />
+                <element signature="n#!!block;n#endGame#0" />
+                <element signature="n#!!block;n#startTimer#0" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -64,14 +82,26 @@
       <find>location</find>
       <find>start</find>
       <find>Timer</find>
+      <find>invisi</find>
+      <find>z</find>
+      <find>settime</find>
+      <find>intersec</find>
+      <find>land</find>
+      <find>console.log</find>
       <find>startTimer</find>
+      <find>createLoop</find>
+      <find>text</find>
+      <find>create</find>
+      <find>createSpeedometer</find>
+      <find>bgmMusic</find>
+      <find>createRing</find>
     </findStrings>
   </component>
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/css/styles.css" />
         <option value="$PROJECT_DIR$/index.html" />
+        <option value="$PROJECT_DIR$/css/styles.css" />
         <option value="$PROJECT_DIR$/game.html" />
         <option value="$PROJECT_DIR$/js/initScene.js" />
       </list>
@@ -86,7 +116,8 @@
   <component name="NodePackageJsonFileManager">
     <packageJsonPaths />
   </component>
-  <component name="ProjectFrameBounds">
+  <component name="ProjectFrameBounds" extendedState="1">
+    <option name="x" value="66" />
     <option name="y" value="23" />
     <option name="width" value="1440" />
     <option name="height" value="826" />
@@ -168,15 +199,15 @@
       <workItem from="1528173358820" duration="821000" />
       <workItem from="1528174207817" duration="287000" />
       <workItem from="1528174511161" duration="1000" />
-      <workItem from="1528192256819" duration="14472000" />
+      <workItem from="1528192256819" duration="26222000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="19584000" />
+    <option name="totallyTimeSpent" value="31334000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1440" height="826" extended-state="0" />
+    <frame x="-105" y="24" width="1440" height="826" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.2611111" />
@@ -204,6 +235,11 @@
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <option name="time" value="7" />
+    </breakpoint-manager>
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/index.html">
       <provider selected="true" editor-type-id="text-editor">
@@ -223,6 +259,24 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2490">
           <caret line="166" lean-forward="true" selection-start-line="166" selection-end-line="166" />
+          <folding>
+            <element signature="n#!!block;n#handleKeyDown#0" />
+            <element signature="n#!!block;n#handleKeyUp#0" />
+            <element signature="e#491#864#0" />
+            <element signature="n#!!block;n#createScene#0" />
+            <element signature="n#!!block;n#createCamera#0" />
+            <element signature="n#!!block;n#createAirplane#0" />
+            <element signature="n#!!block;n#logicForAirplane#0" />
+            <element signature="n#!!block;n#createLoop#0" />
+            <element signature="n#!!block;n#showTimer#0" />
+            <element signature="n#!!block;n#showScoreboard#0" />
+            <element signature="n#!!block;n#createSpeedometer#0" />
+            <element signature="n#!!block;n#createTimer#1" />
+            <element signature="n#!!block;n#animate#0" />
+            <element signature="n#!!block;n#startGame#0" />
+            <element signature="n#!!block;n#endGame#0" />
+            <element signature="n#!!block;n#startTimer#0" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -287,31 +341,49 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../../Week4_NovianiLitriani_2001594623/initScene.js" />
     <entry file="file://$PROJECT_DIR$/../../Week4_NovianiLitriani_2001594623/Week3.html" />
-    <entry file="file://$PROJECT_DIR$/index.html">
+    <entry file="file://$PROJECT_DIR$/js/initScene.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="4" column="26" selection-start-line="4" selection-start-column="26" selection-end-line="4" selection-end-column="26" />
+        <state relative-caret-position="555">
+          <caret line="197" column="19" selection-start-line="197" selection-start-column="19" selection-end-line="197" selection-end-column="19" />
+          <folding>
+            <element signature="n#!!block;n#handleKeyDown#0" />
+            <element signature="n#!!block;n#handleKeyUp#0" />
+            <element signature="e#491#864#0" />
+            <element signature="n#!!block;n#createScene#0" />
+            <element signature="n#!!block;n#createCamera#0" />
+            <element signature="n#!!block;n#createAirplane#0" />
+            <element signature="n#!!block;n#logicForAirplane#0" />
+            <element signature="n#!!block;n#createLoop#0" />
+            <element signature="n#!!block;n#showTimer#0" />
+            <element signature="n#!!block;n#showScoreboard#0" />
+            <element signature="n#!!block;n#createSpeedometer#0" />
+            <element signature="n#!!block;n#createTimer#1" />
+            <element signature="n#!!block;n#animate#0" />
+            <element signature="n#!!block;n#startGame#0" />
+            <element signature="n#!!block;n#endGame#0" />
+            <element signature="n#!!block;n#startTimer#0" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/css/styles.css">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/js/initScene.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="36" lean-forward="true" selection-start-line="36" selection-end-line="36" />
+        <state relative-caret-position="720">
+          <caret line="48" column="14" selection-start-line="48" selection-start-column="14" selection-end-line="48" selection-end-column="14" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/game.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="15" column="43" lean-forward="true" selection-start-line="15" selection-start-column="43" selection-end-line="15" selection-end-column="43" />
+        <state relative-caret-position="240">
+          <caret line="16" column="23" selection-start-line="16" selection-start-column="23" selection-end-line="16" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/index.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="195">
+          <caret line="13" column="7" lean-forward="true" selection-start-line="13" selection-start-column="7" selection-end-line="13" selection-end-column="7" />
         </state>
       </provider>
     </entry>
