@@ -1,5 +1,5 @@
 var canvas, engine, scene, airplane, camera, physicsEngine, scoreText, timerText, bgmMusic, torus;
-var score = 0, timer = 0, timeleft = 60;
+var score = 0, timer = 0, timeleft = 5;
 
 var airSpeed = -10; // units per second
 var turnSpeed = 20.0; // degrees per second
@@ -50,11 +50,14 @@ function createScene() {
     var skybox = BABYLON.Mesh.CreateBox("skyBox", 1000, scene);
     var skyboxMaterial = new BABYLON.StandardMaterial("skyBox", scene);
     skyboxMaterial.backFaceCulling = false;
-    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("TropicalSunnyDay/TropicalSunnyDay", scene);
+    skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("texture/TropicalSunnyDay/TropicalSunnyDay", scene);
     skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
     skyboxMaterial.diffuseColor = new BABYLON.Color3(0, 0, 0);
     skyboxMaterial.specularColor = new BABYLON.Color3(0, 0, 0);
     skybox.material = skyboxMaterial;
+
+
+    var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
 }
 
 function createCamera() {
@@ -78,7 +81,7 @@ function createCamera() {
 }
 
 function createAirplane() {
-    BABYLON.SceneLoader.ImportMesh("", "", "airplane1.babylon", scene, function (newMeshes) {
+    BABYLON.SceneLoader.ImportMesh("", "", "model/airplane1.babylon", scene, function (newMeshes) {
         airplane = newMeshes[0];
         airplane.scaling = new BABYLON.Vector3(1, 1 / 16, 1 / 8);
         airplane.position = new BABYLON.Vector3(0, 35, 50);
@@ -109,7 +112,7 @@ function logicForAirplane() {
 
 function createRing() {
     if (torus == undefined) {
-        torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 7}, scene);
+        torus = BABYLON.MeshBuilder.CreateTorus("torus", {thickness: 0.2, diameter: 7, tessellation: 50}, scene);
         torus.position = new BABYLON.Vector3(0, 35, 30);
         torus.rotation.x = Math.PI / 2;
     }

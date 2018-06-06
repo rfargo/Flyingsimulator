@@ -5,7 +5,6 @@
     <title>Go Far!</title>
     <script type="text/javascript" src="js/babylon.custom.js"></script>
     <script type="text/javascript" src="js/initScene.js"></script>
-    <script type="text/javascript" src="js/cannon.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -13,41 +12,47 @@
     <link rel="stylesheet" type="text/css" href="css/styles.css">
 </head>
 <body>
-    <div id="start">
-        <h1> Go Far </h1>
+<div id="start">
+    <h1> Go Far </h1>
+    <div>
         <a class="btn btn-default btn-lg" href="game.html">Play</a>
-		<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
-		  Credits
-		</button>
-
-		<!-- Modal -->
-		<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-		  <div class="modal-dialog" role="document">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h5 class="modal-title" style="font-size: 20px; display: inline-block; font-weight: 700; color: navy;">Credits</h5>
-		        <button type="button" class="close" data-dismiss="modal" aria-label="Close" style="display: inline-block;">
-		          <span aria-hidden="true">&times;</span>
-		        </button>
-		      </div>
-		      <div class="modal-body">
-		      	<strong>Game Creator</strong><br>
-		      	Noviani Litriani<br>
-		      	Reinaldy Edbert Fargo<br>
-		      	Syailendra Rizki Hanif<br>
-		      	<br>
-		      	<strong>Materials</strong><br>
-		        Airplane : www.yobi3d.com<br>
-		        Sound : GameBrup<br>
-		        Skybox : github.com/BabylonJS<br>
-		      </div>
-		      <div class="modal-footer">
-		        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-		      </div>
-		    </div>
-		  </div>
-		</div>
-    </div>        
     </div>
+    <div>
+        <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#credits">
+            Credits
+        </button>
+    </div>
+
+    <div class="modal fade" id="credits" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+         aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title"
+                        style="font-size: 20px; display: inline-block; font-weight: 700; color: navy;">Credits</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"
+                            style="display: inline-block;">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <strong>Game Creator</strong><br>
+                    Noviani Litriani<br>
+                    Reinaldy Edbert Fargo<br>
+                    Syailendra Rizki Hanif<br>
+                    <br>
+                    <strong>Materials</strong><br>
+                    Airplane : www.yobi3d.com<br>
+                    Sound : GameBrup<br>
+                    Skybox : github.com/BabylonJS<br>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
 </body>
 </html>
