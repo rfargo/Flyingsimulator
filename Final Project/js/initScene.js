@@ -1,5 +1,5 @@
 var canvas, engine, scene, airplane, camera, physicsEngine, scoreText, timerText, bgmMusic, torus;
-var score = 0, timer = 0, timeleft = 60;
+var score = 0, timer = 0, timeleft = 10;
 
 var airSpeed = -10; // units per second
 var turnSpeed = 20.0; // degrees per second
@@ -87,7 +87,7 @@ function createAirplane() {
         airplane.position = new BABYLON.Vector3(0, 35, 50);
         camera.lockedTarget = airplane; //version 2.5 onwards
         setTimeout(() => {
-            startTimer(timeleft - 1);
+            startTimer(timeleft-1);
         }, 5000);
         logicForAirplane();
     });
@@ -274,7 +274,43 @@ function endGame() {
 
     let element = document.getElementById("end");
     element.style.display = "block";
+
+    $("#end h2").html("Game Over");
     $("#end h3").html("Score: " + score);
+
+    var leaderboard = JSON.parse(localStorage.getItem('highscore'));
+    var data;
+
+    if (leaderboard[0].name === '-') {
+        $("#end h2").html("New Highscore!");
+        data = getNewHighscoreData();
+        leaderboard[0] = data;
+    }
+    else if (leaderboard.length < 10) {
+        $("#end h2").html("New Highscore!");
+        data = getNewHighscoreData();
+        leaderboard.push(data);
+    }
+    else if (leaderboard.length == 10 && score > leaderboard[leaderboard.length - 1].score) {
+        $("#end h2").html("New Highscore!");
+        data = getNewHighscoreData();
+        leaderboard[leaderboard.length - 1] = data;
+    }
+
+    leaderboard.sort(function (a, b) {
+        return parseFloat(b.score) - parseFloat(a.score);
+    });
+
+    localStorage.setItem('highscore', JSON.stringify(leaderboard));
+}
+
+function getNewHighscoreData() {
+    var name = prompt("What's your name?");
+    var person = {
+        name: name,
+        score: score
+    }
+    return person;
 }
 
 function startTimer(duration) {
