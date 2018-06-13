@@ -6,12 +6,13 @@ var keysDown = {};
 // units per second
 var airSpeed = -10;
 
-
 // degrees per second
 var turnSpeed = 20.0;
 
 // keep track of the last time movement was processed, in microseconds
 var lastFrame = -1;
+
+var bgmMusic;
 
 // keypress listeners
 document.onkeydown = handleKeyDown;
@@ -26,6 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
    
     scene = new BABYLON.Scene(engine); //play scene
+
+    bgmMusic = new BABYLON.Sound("Music", "sound/ENGINE.wav", scene, null,
+        {loop: true, autoplay: true});
 
     createScene();
     createCamera();
@@ -60,8 +64,7 @@ function createScene() {
     // create a basic light, aiming 0,8,0
     var light = new BABYLON.HemisphericLight('hlight', new BABYLON.Vector3(0, 8, 0), scene);
 
-    var bgmMusic = new BABYLON.Sound("Music", "sound/ENGINE.wav", scene, null,
-        {loop: true, autoplay: true});
+
 }
 
 function createLand() {
@@ -297,6 +300,7 @@ function _render() {
     engine.runRenderLoop(function () {
         scene.render();
         if (timeleft === 0) {
+            bgmMusic.stop();
             engine.stopRenderLoop();
             let e1 = document.getElementById("ingame");
             e1.style.display = "none";
